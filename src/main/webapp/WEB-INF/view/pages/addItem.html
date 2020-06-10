@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Select goods</title>
+    <style type="text/css">
+        #greetingStyle {
+            margin-left: 10%;
+            margin-right: 10%;
+            background: #fc0;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+    <style type="text/css">
+        #formStyle {
+            margin-left: 10%;
+            margin-right: 10%;
+            background: #01DF01;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="greetingStyle" th:inline="text">
+        <h3>Hello [[${session.name}]] !</h3>
+    </div>
+
+    <div th:with="orderList=${order}">
+    <div id="formStyle">
+        <div th:if="${(orderList==null) || (orderList.isEmpty())}">
+            <h4>Make your order</h4>
+        </div>
+        <div th:if="${(!(orderList==null)) && (!(orderList.isEmpty()))}">
+            <h4>You have already chosen:</h4>
+            <tr th:each="object : ${orderList}">
+                <p><td th:text="|${object.key} x|" ></td>
+                <td th:text="${object.value}"></td>
+            </tr>
+        </div>
+    <form th:action="@{/goodsAddServlet}" method="post">
+       <select th:name="good" >
+            <option value="--Choose item--">--Choose item--</option>
+                <tr th:each="object : ${session.allGoodsList}">
+                    <option th:value="|${object.getName()} (${object.getPrice()})|">[[${object.getName()}]] ([[${object.getPrice()}]] $)</option>
+                </tr>
+        </select>
+            <p>
+                <button type="submit" name="button" value="add">Add Item</button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp;
+                <button type="submit" name="button" value="submit">Submit</button>
+            </p>
+        </form>
+    </div>
+  </div>
+</body>
+</html>
+
+
